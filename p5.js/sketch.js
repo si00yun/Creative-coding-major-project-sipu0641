@@ -2,6 +2,7 @@
 let bg;                //Store the background color
 let colorSet;          //Store all colors
 let rings = [];       //Save the random parameters (position/radius/color matching) of each circle
+let isPaused = false;  // --- global pause flag ---
 
 function setup() {
   //Create a canvas as large as the current browser window
@@ -20,8 +21,7 @@ function setup() {
     color(40, 255,200)   // aqua
   ];
   bg = colorSet[0];
-  
-  generateLayout(); 
+
 }
 
 function draw() {
@@ -68,12 +68,21 @@ function drawAura(ring, t) {
 
 //Control the drop and reset of the circular graphic
 function fallAndReset(ring){
-  ring.y += ring.vy;  // Update the position through speed
+   // ---- 鼠标靠近圆，则该圆停止落下 ----
+  let d = dist(mouseX, mouseY, ring.x, ring.y);
+  if (d < ring.r * 1.2) {
+    return; // 不更新 y，圆保持原地不动
+  }
+    
+  // ---- 全局暂停时，所有圆都不动 ----
+  if (isPaused) return;
+   
+  ring.y += ring.vy;  // Update falling position
 
-  if (ring.y > height + ring.r){ //When the circle extends beyond the canvas
-    ring.y =- ring.r;  //Let the small ball keep falling
-    ring.x = random(ring.r, width-ring.r); //Random x position
-    ring.vy = random(1,3);  //New falling velocity
+  if (ring.y > height + ring.r){ 
+    ring.y = -ring.r;  
+    ring.x = random(ring.r, width-ring.r); 
+    ring.vy = random(1,3);  
     
     //random color
     ring.palette = [
@@ -81,7 +90,7 @@ function fallAndReset(ring){
       random(colorSet.slice(1)),
       random(colorSet.slice(1)),
       random(colorSet.slice(1)),
-      random(colorSet.slice(1)),
+      random(colorSet.slice(1))
     ];
   }
 }
@@ -271,4 +280,77 @@ function drawDotMandala(ring){
   // small circle in the center
   fill(ring.palette[0]);
   circle(ring.x, ring.y, ring.r * 0.20);
+}
+/* ============================================================
+   Keyboard interaction
+   D: spawn a new circle from top
+   C: change palettes of all circles
+   Z: clear all circles
+   Space: pause / resume animation
+   ============================================================ */
+function keyPressed() {
+  // Space → pause / resume
+  if (key === ' ') {
+    isPaused = !isPaused;
+  }
+
+  // D → spawn a new ring from top
+  if (key === 'D' || key === 'd') {
+    spawnRingFromTop();
+  }
+
+  // C → randomize palettes
+  if (key === 'C' || key === 'c') {
+    randomizePalettes();
+  }
+
+  // Z → clear all rings (empty canvas)
+  if (key === 'Z' || key === 'z') {
+    rings = [];
+  }
+}
+
+// Spawn one new ring at the top, random style (spokes / dots)
+function spawnRingFromTop() {
+  const S = min(width, height);
+  const pool = colorSet.slice(1);
+
+  // randomly choose style
+  const style = random(['spokes', 'dots']);
+  let r, vy;
+
+  if (style === 'spokes') {
+    r  = random(S * 0.06, S * 0.09);
+    vy = random(3.8, 4.5);
+  } else {
+    r  = random(S * 0.05, S * 0.08);
+    vy = random(2.5, 3.5);
+  }
+
+  const x = random(r + 20, width - r - 20);
+  const y = -r; // start just above the canvas
+
+  const palette = [
+    random(pool),
+    random(pool),
+    random(pool),
+    random(pool),
+    random(pool)
+  ];
+
+  rings.push({ x, y, r, palette, style, vy });
+}
+
+// Randomize palette for all existing rings
+function randomizePalettes() {
+  const pool = colorSet.slice(1);
+  for (let ring of rings) {
+    ring.palette = [
+      random(pool),
+      random(pool),
+      random(pool),
+      random(pool),
+      random(pool)
+    ];
+  }
 }
