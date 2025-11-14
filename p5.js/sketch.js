@@ -9,7 +9,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
 
   colorSet = [
-    color(10,13,24),     // bg
+    color(36, 35, 54),     // bg
     color(255, 90, 0),   // hot orange
     color(255, 0, 110),  // magenta
     color(80, 220, 100), // mint
@@ -44,7 +44,7 @@ function draw() {
     }
 
     // Update the falling position
-    fallAndReset(ring);     
+    fallAndReset(ring); 
   }
 }
 
