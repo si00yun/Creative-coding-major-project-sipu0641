@@ -12,11 +12,9 @@ Siyun's individual part
 
 ## My Individual Approach to Animation
 - This project is user input project,which let user's input influence how the graphics appear on the canvas
-- Compared with the others in my group, my version is mainly characterized by:
-  - 1.**User-driven output**:The content presented on the screen will be entirely based on user behavior
-  - 2.**Interaction as the main driver**:Mouse clicks create ripple effects, and key presses control circle creation, colors, and playback.
+- Compared with the others in my group, my version is defined by a fully user-driven output, where all visual changes depend on clicks and key interactions.
 
-## Visual Inspiration
+### Visual Inspiration
 - The falling effect of the circles is inspired by: [Snowflakes in p5.js](https://p5js.org/examples/classes-and-objects-snowflakes/)
   - This gave me the idea to make the circles keep falling and let users control the animation, which makes the visuals feel more dynamic.
 - The mouse interaction is inspired by:
@@ -33,10 +31,10 @@ Siyun's individual part
   - A mouse click adds a ripple object to clickRipples at (`mouseX`, `mouseY`). During `drawClickRipples()`, each ripple’s radius growth and alpha fading are driven by its `life / maxLife` ratio, producing a water-ripple visual effect.
   - In `fallAndReset()`, the program checks the distance between the mouse and each circle using `dist(mouseX, mouseY, ring.x, ring.y)`. If the mouse is close enough, the circle stops updating its `y` position and temporarily stops falling.
 
-#### External Code / Techniques:
+### External Code / Techniques:
   - The effect of water ripples mainly refers to this YouTube tutorial: [water ripples tutorial](https://www.youtube.com/watch?v=9lEaYKP7yV0)
   
-#### Modifications to Group Code
+### Modifications to Group Code
 - Deleted `generateLayout()` from the group version to disable automatic circle generation
 - Change the background color to improve the visual effect
 
