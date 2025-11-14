@@ -3,6 +3,7 @@ let bg;                //Store the background color
 let colorSet;          //Store all colors
 let rings = [];       //Save the random parameters (position/radius/color matching) of each circle
 let isPaused = false;  // --- global pause flag ---
+let clickRipples = []; // 存储鼠标点击产生的圆波光
 
 function setup() {
   //Create a canvas as large as the current browser window
@@ -26,6 +27,10 @@ function setup() {
 
 function draw() {
   background(bg);
+
+  // 先画鼠标点击产生的圆波光（在背景上、所有下落圆的后面）
+  drawClickRipples();
+
   for (let ring of rings){
     // Fall progress t (0-1) : Used to control the scaling and fading of halos
     // The circular figure starts from the top of the canvas and approaches 1 after passing through it
@@ -353,4 +358,47 @@ function randomizePalettes() {
       random(pool)
     ];
   }
+}
+// 画所有点击产生的圆波光（扩散 + 淡出）
+function drawClickRipples() {
+  for (let i = clickRipples.length - 1; i >= 0; i--) {
+    let rpl = clickRipples[i];
+
+    let t = rpl.life / rpl.maxLife;           // 计算动画进度0 → 1
+    let alpha = map(t, 0, 1, 180, 0);         // 透明度从 180 渐变到 0
+    let radius = rpl.baseR * (1 + 1.8 * t);   // 半径慢慢变大，像水波一样扩散
+
+    noFill();
+    strokeWeight(3);
+    stroke(red(rpl.col), green(rpl.col), blue(rpl.col), alpha);
+    circle(rpl.x, rpl.y, radius * 2);
+
+    if (!isPaused) {
+      rpl.life++;  // 只更新寿命，不再下落
+    }
+
+    // 超出寿命后删除（删除下落判断）
+    if (rpl.life >= rpl.maxLife) {
+      clickRipples.splice(i, 1);
+    }
+  }
+}
+
+
+// 鼠标点击背景时生成一个圆波
+function mousePressed() {
+  // 只在画布范围内响应
+  if (mouseX < 0 || mouseX > width || mouseY < 0 || mouseY > height) return;
+  
+  const pool = colorSet.slice(1);  // 使用现有配色（跳过背景色）
+  let col = random(pool);
+
+  clickRipples.push({
+    x: mouseX,
+    y: mouseY,
+    baseR: random(40, 80), // 初始大小
+    life: 0,
+    maxLife: 60,           // 寿命（帧数）
+    col
+  });
 }
