@@ -11,8 +11,7 @@ Siyun's individual part
 - **Mouse clicks**:wave ripples are generated；and when the mouse approaches a circle, its animation pauses.
 
 ## My Individual Approach to Animation
-- This project is user input project,which let user's input influence how the graphics appear on the canvas
-- Compared with the others in my group, my version is defined by a fully user-driven output, where all visual changes depend on clicks and key interactions.
+- This project is user input project,which let user's input influence how the graphics appear on the canvas.Compared with the others in my group, my version is defined by a fully user-driven output, where all visual changes depend on clicks and key interactions.
 
 ### Visual Inspiration
 - The falling effect of the circles is inspired by: [Snowflakes in p5.js](https://p5js.org/examples/classes-and-objects-snowflakes/)
@@ -39,4 +38,5 @@ Siyun's individual part
 - Change the background color to improve the visual effect
 
 ### References & Acknowledgments
-- Used p5.js official documentation for
+- Used p5.js documentation for `map()` and array `slice()` to support ripple fading and colour selection.
+- The main code is derived from classroom materials
