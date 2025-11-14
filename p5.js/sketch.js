@@ -319,7 +319,7 @@ function drawClickRipples() {
     let rpl = clickRipples[i];
 
     let t = rpl.life / rpl.maxLife;           // Calculate the animation progress from 0 to 1
-    let alpha = map(t, 0, 1, 180, 0);         // Transparency gradually changes from 180 to 0
+    let alpha = map(t, 0, 1, 180, 0);         // Transparency gradually changes from 180 to 0，Refer to the official p5.js: https://p5js.org/reference/p5/map/
     let radius = rpl.baseR * (1 + 1.8 * t);   // The radius gradually increases, spreading like water waves
 
     noFill();
@@ -333,7 +333,7 @@ function drawClickRipples() {
 
     //Delete after exceeding its lifespan
     if (rpl.life >= rpl.maxLife) {
-      clickRipples.splice(i, 1);
+      clickRipples.splice(i, 1);              
     }
   }
 }
@@ -344,7 +344,9 @@ function mousePressed() {
   // Respond only within the canvas range
   if (mouseX < 0 || mouseX > width || mouseY < 0 || mouseY > height) return;
   
-  const pool = colorSet.slice(1);  // 使用现有配色（跳过背景色）
+  const pool = colorSet.slice(1);  
+  // slice() is used to create a new sub-array from colorSet beginning at index 1
+  // Reference for the usage of functions in official p5.js: https://p5js.org/reference/p5/splice/
   let col = random(pool);
 
   clickRipples.push({
